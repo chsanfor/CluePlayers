@@ -1,0 +1,10 @@
+K, Kitchen
+D, Dining Room
+E, Entry
+C, Closet
+G, Guest Bed
+M, Master Bed
+B, Bathroom
+Y, Library
+L, Lounge
+R, Recreational

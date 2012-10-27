@@ -1,0 +1,7 @@
+1. seenArray was changed to primitive boolean type, because wrapper class was not necessary.
+2. In loadConfigFiles, the for loop initializing the elements of seenArray to false, was removed,
+because the constructor for the primitive boolean array already does this.
+3. In loadCSVFile, count was renamed to countColumns for clarity.
+4. In the RoomCell class, "NONE" was added to the enum DoorDirection, for the case where the RoomCell is not a door.
+5. In loadCSVFile, the else statement that added a RoomCell class to cells was removed, because this code did not need
+to be repeated (it does not depend on whether or not r is a door).

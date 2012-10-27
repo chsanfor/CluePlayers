@@ -1,0 +1,56 @@
+package test;
+
+import static org.junit.Assert.assertEquals;
+import main.Board;
+import main.RoomCell;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class BoardTest {
+	private Board board;
+	private RoomCell roomCell;
+	
+	@Before
+	public void setup() {
+		board = new Board();
+		board.loadConfigFiles();
+	}
+	
+	@Test
+	public void testRoom() {
+		assertEquals(10, board.getRooms().size());
+	}
+	
+	@Test
+	public void testMapping() {
+		assertEquals("Closet", board.getRooms().get("C"));
+		assertEquals("Recreational", board.getRooms().get("R"));
+	}
+	
+	@Test
+	public void testRowsCols() {
+		assertEquals(25, board.getNumRows());
+		assertEquals(13, board.getNumColumns());
+	}
+	
+	@Test
+	public void testDoors() {
+		assertEquals(RoomCell.DoorDirection.DOWN, roomCell.getDoorDirection());
+		assertEquals(true, roomCell.isDoorway());
+		assertEquals(RoomCell.DoorDirection.UP, roomCell.getDoorDirection());
+		assertEquals(true, roomCell.isDoorway());
+	}
+	
+	@Test
+	public void testInitials() {
+		assertEquals(true, board.getRooms().containsValue("Closet") && board.getRooms().get("C").equals("Closet"));
+		assertEquals(true, board.getRooms().containsValue("Recreational") && board.getRooms().get("R").equals("Recreational"));
+	}
+	
+	@Test
+	public void testCalcIndex() {
+		assertEquals(5, board.calcIndex(0, 6));
+		assertEquals(2*13+3, board.calcIndex(3, 3));
+	}
+}

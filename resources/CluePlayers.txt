@@ -1,0 +1,18 @@
+You
+White
+0, 3
+Mr. T
+Tan
+0, 9
+Mrs. F
+Pink
+11, 12
+Dr. Malpractice
+Black
+24, 9
+Col. Mines
+Blue
+24, 4
+Godzilla
+Green
+13, 0
