@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Vector;
@@ -48,12 +49,40 @@ public class Board {
 		return false;
 	}
 	
-	public void Deal(ArrayList<Card> theCards) {
-		
-	}
-	
-	public void Deal() {
-		
+	public void deal() {
+		Random rand = new Random();
+		Solution solution = new Solution("Empty", "Empty", "Empty");
+		ArrayList<Card> cardsCopy = cards;
+		int numCards = cards.size();
+		int numDealt = 0;
+		while(numCards > 0) {
+			Card randomCard = cardsCopy.get(rand.nextInt(numCards));
+			Card.CardType type = randomCard.getCardType();
+			if(type == Card.CardType.PERSON && solution.getPerson().equals("Empty"))
+				solution.setPerson(randomCard.getName());
+			else if(type == Card.CardType.WEAPON && solution.getWeapon().equals("Empty"))
+				solution.setWeapon(randomCard.getName());
+			else if(type == Card.CardType.ROOM && solution.getRoom().equals("Empty"))
+				solution.setRoom(randomCard.getName());
+			else {
+				int index = numDealt % (computerPlayers.size() + 1);
+				if(index == 5)
+					humanPlayer.addCard(randomCard);
+				else {
+					ComputerPlayer him = computerPlayers.get(index);
+					him.addCard(randomCard);
+					computerPlayers.set(index, him);
+				}
+				++numDealt;	
+			}
+			cardsCopy.remove(randomCard);
+			--numCards;
+			randomCard.setDealt(true);
+			for(Card i : cards) {
+				if(i.equals(randomCard))
+					i = randomCard;
+			}
+		}
 	}
 	public Solution getSolution() {
 		return solution;
@@ -74,10 +103,11 @@ public class Board {
 		return computerPlayers;
 	}
 
-	public void loadConfigFiles(String txtFile, String csvFile, String playerFile) {
+	public void loadConfigFiles(String txtFile, String csvFile, String playerFile, String cardsFile) {
 		loadTXTFile(txtFile);
 		loadCSVFile(csvFile);
 		loadPlayers(playerFile);
+		loadCards(cardsFile);
 		
 		seenArray = new boolean[numRows*numColumns];
 		/*
@@ -161,7 +191,7 @@ public class Board {
 	}
 	
 	public void loadPlayers(String playersFile) throws BadConfigFormatException {
-		/*try {
+		try {
 			Scanner in = new Scanner(new FileReader(playersFile));
 			String line1 = new String();
 			String line2 = new String();
@@ -185,7 +215,34 @@ public class Board {
 		}
 		catch (FileNotFoundException e) {
 			System.out.println("File not found.");
-		}*/
+		}
+	}
+	
+	public void loadCards(String cardsFile) {
+		try {
+			Scanner in = new Scanner(new FileReader(cardsFile));
+			String line1 = new String();
+			String line2 = new String();
+			while(in.hasNext()) {
+				line1 = in.nextLine();
+				line2 = in.nextLine();
+				Card.CardType type = null;
+				if(line2.equals("Person"))
+					type = Card.CardType.PERSON;
+				else if(line2.equals("Weapon"))
+					type = Card.CardType.WEAPON;
+				else if(line2.equals("Room"))
+					type = Card.CardType.ROOM;
+				else {
+					System.out.println(line2);
+					throw new BadConfigFormatException("Invalid config file.");
+				}
+				cards.add(new Card(line1, type));
+			}
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("File not found.");
+		}
 	}
 	
 	public BoardCell getCellAt(int index) {

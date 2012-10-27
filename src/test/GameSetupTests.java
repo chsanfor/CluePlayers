@@ -16,7 +16,7 @@ public class GameSetupTests {
 	
 	public GameSetupTests() {
 		board = new Board();
-		board.loadConfigFiles("resources/clueKey.txt", "resources/cluelayout.csv", "resources/CluePlayers.txt");
+		board.loadConfigFiles("resources/clueKey.txt", "resources/cluelayout.csv", "resources/CluePlayers.txt", "resources/ClueCards.txt");
 	}
 	
 	@Test
@@ -27,7 +27,7 @@ public class GameSetupTests {
 		assertEquals("White", mrYou.getColor());
 		WalkwayCell space1 = new WalkwayCell(0, 3);
 		assertEquals(space1.getIndex(), mrYou.getStart().getIndex());
-		ComputerPlayer mrsF = board.getComputerPlayer(2);
+		ComputerPlayer mrsF = board.getComputerPlayer(1);
 		assertEquals("Mrs. F", mrsF.getName());
 		assertEquals("Pink", mrsF.getColor());
 		WalkwayCell space2 = new WalkwayCell(11, 12);
@@ -46,17 +46,17 @@ public class GameSetupTests {
 		for(Card i: board.getCards()) {
 			if(i.getCardType() == Card.CardType.PERSON) {
 				++people;
-				if(i.getName() == "Mr. T")
+				if(i.getName().equals("Mr. T"))
 					hasT = true;
 			}
 			else if(i.getCardType() == Card.CardType.WEAPON) {
 				++weapons;
-				if(i.getName() == "Knife")
+				if(i.getName().equals("Knife"))
 					hasKnife = true;
 			}
 			else if(i.getCardType() == Card.CardType.ROOM) {
 				++rooms;
-				if(i.getName() == "Entry")
+				if(i.getName().equals("Entry"))
 					hasEntry = true;
 			}
 		}
@@ -68,10 +68,10 @@ public class GameSetupTests {
 	
 	@Test
 	public void TestDeal() {
-		board.Deal();
+		board.deal();
 		HumanPlayer mrYou = board.getHumanPlayer();
 		assertEquals(3, mrYou.getCards().size());
-		ComputerPlayer godzilla = board.getComputerPlayer(5);
+		ComputerPlayer godzilla = board.getComputerPlayer(4);
 		assertEquals(3, godzilla.getCards().size());
 		
 		for(Card i: board.getCards()) {

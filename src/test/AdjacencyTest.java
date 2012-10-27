@@ -23,7 +23,7 @@ public class AdjacencyTest {
 	@Before
 	public void setUp() {
 		board = new Board();
-		board.loadConfigFiles("resources/clueKey.txt", "resources/cluelayout.csv", "resources/CluePlayers.txt");
+		board.loadConfigFiles("resources/clueKey.txt", "resources/cluelayout.csv", "resources/CluePlayers.txt", "resources/ClueCards.txt");
 		board.calcAdjacencies();
 		testList = new LinkedList<Integer>();
 		testSet = new HashSet<BoardCell>();

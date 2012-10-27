@@ -1,0 +1,42 @@
+You
+Person
+Mr. T
+Person
+Mrs. F
+Person
+Dr. Malpractice
+Person
+Col. Mines
+Person
+Godzilla
+Person
+Knife
+Weapon
+Gun
+Weapon
+Bow
+Weapon
+Bat
+Weapon
+Grenade
+Weapon
+Blowgun
+Weapon
+Kitchen
+Room
+Dining Room
+Room
+Entry
+Room
+Guest Bed
+Room
+Master Bed
+Room
+Bathroom
+Room
+Library
+Room
+Lounge
+Room
+Recreational
+Room

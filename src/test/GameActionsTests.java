@@ -17,7 +17,7 @@ public class GameActionsTests {
 	
 	public GameActionsTests() {
 		board = new Board();
-		board.loadConfigFiles("resources/clueKey.txt", "resources/cluelayout.csv", "resources/CluePlayers.txt");
+		board.loadConfigFiles("resources/clueKey.txt", "resources/cluelayout.csv", "resources/CluePlayers.txt", "resources/ClueCards.txt");
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class GameActionsTests {
 	public void testDisproveSuggestion() {
 		// Test Disproving a suggestion where the only valid card is a room card.
 		boolean isDisproved = false;
-		board.Deal();
+		board.deal();
 		
 		ComputerPlayer first = board.getComputerPlayer(0);
 		Card testRoom = new Card("testRoom", Card.CardType.ROOM);

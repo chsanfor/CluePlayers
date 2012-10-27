@@ -27,7 +27,7 @@ public class BoardInitTests {
 	@BeforeClass
 	public static void setUp() {
 		board = new Board();
-		board.loadConfigFiles("resources/CR-ClueLegend.txt", "resources/CR-ClueLayout.csv", "resources/CluePlayers.txt");
+		board.loadConfigFiles("resources/CR-ClueLegend.txt", "resources/CR-ClueLayout.csv", "resources/CluePlayers.txt", "resources/ClueCards.txt");
 	}
 	@Test
 	public void testRooms() {

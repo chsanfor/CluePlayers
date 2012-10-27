@@ -19,6 +19,10 @@ public class Card {
 		return dealt;
 	}
 	
+	public void setDealt(boolean deal) {
+		dealt = deal;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -37,6 +41,10 @@ public class Card {
 	@Override
 	public boolean equals(Object c)
 	{
+		if(c instanceof Card) {
+			Card cardC = (Card) c;
+			return (name.equals(cardC.getName()) && cardType == cardC.getCardType());
+		}
 		return false;
 	}
 }

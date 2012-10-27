@@ -14,6 +14,7 @@ public class Player {
 		name = theName;
 		color = theColor;
 		start = theStart;
+		cards = new ArrayList<Card>();
 	}
 	
 	public Card disproveSuggestion(String person, String weapon, String room) {
