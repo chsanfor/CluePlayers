@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import junit.framework.Assert;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import main.*;
 
@@ -14,7 +15,8 @@ public class GameSetupTests {
 	
 	private static Board board;
 	
-	public GameSetupTests() {
+	@BeforeClass
+	public static void setUp() {
 		board = new Board();
 		board.loadConfigFiles("resources/clueKey.txt", "resources/cluelayout.csv", "resources/CluePlayers.txt", "resources/ClueCards.txt");
 	}
@@ -96,4 +98,5 @@ public class GameSetupTests {
 		}
 		Assert.assertFalse(duplicates);
 	}
+	
 }

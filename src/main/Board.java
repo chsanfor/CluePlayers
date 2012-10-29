@@ -38,20 +38,15 @@ public class Board {
 		path = new Vector<Integer>();
 		computerPlayers = new ArrayList<ComputerPlayer>();
 		cards = new ArrayList<Card>();
-
-	}
-	
-	public void setSolution(String person, String weapon, String room) {
-		solution = new Solution(person, weapon, room);
+		solution = new Solution("Empty", "Empty", "Empty");
 	}
 	
 	public boolean checkAccusation(String person, String weapon, String room) {
-		return false;
+		return person.equals(solution.getPerson()) && weapon.equals(solution.getWeapon()) && room.equals(solution.getRoom());
 	}
 	
 	public void deal() {
 		Random rand = new Random();
-		Solution solution = new Solution("Empty", "Empty", "Empty");
 		ArrayList<Card> cardsCopy = cards;
 		int numCards = cards.size();
 		int numDealt = 0;
@@ -66,7 +61,7 @@ public class Board {
 				solution.setRoom(randomCard.getName());
 			else {
 				int index = numDealt % (computerPlayers.size() + 1);
-				if(index == 5)
+				if(index == computerPlayers.size())
 					humanPlayer.addCard(randomCard);
 				else {
 					ComputerPlayer him = computerPlayers.get(index);
@@ -238,6 +233,7 @@ public class Board {
 					throw new BadConfigFormatException("Invalid config file.");
 				}
 				cards.add(new Card(line1, type));
+				Player.allCards.add(new Card(line1, type));
 			}
 		}
 		catch (FileNotFoundException e) {
@@ -309,8 +305,26 @@ public class Board {
 		}	
 	}
 	
-	public Player handleSuggestion(String person, String weapon, String room) {
+	public Player handleSuggestion(Card person, Card weapon, Card room, Player suggestor) {
+		Random rand = new Random();
+		int size = computerPlayers.size();
+		int randomInt = rand.nextInt(size);
+		ArrayList<Player> disprovers = new ArrayList<Player>();
+		if(!humanPlayer.getName().equals(suggestor.getName()))
+			disprovers.add(humanPlayer);
+		for(ComputerPlayer i : computerPlayers) {
+			if(!i.getName().equals(suggestor.getName()))
+				disprovers.add(i);
+		}
+		for(int i = 0; i < size; ++i) {
+			int index = (randomInt + i) % size;
+			Card disproved = disprovers.get(index).disproveSuggestion(person, weapon, room);
+			if(disproved != null)
+				return disprovers.get(index);
+		}
+		
 		return null;
+		
 	}
 
 	public void calcTargets(int startIndex, int steps) {
@@ -323,7 +337,7 @@ public class Board {
 		for (int i =0; i < adjacencyMatrix.get(startIndex).size(); i++) {
 			seenArray[startIndex] = true;
 			int adjCell = adjacencyMatrix.get(startIndex).get(i);
-			if(seenArray[adjCell] == false && (cells.get(adjCell).isDoorway()
+			if(!seenArray[adjCell] && (cells.get(adjCell).isDoorway()
 					|| cells.get(adjCell).isWalkway())) {
 				added=true;
 				path.add(adjCell);

@@ -10,23 +10,28 @@ import junit.framework.Assert;
 import main.Board;
 import main.Card.CardType;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class GameActionsTests {
 	private static Board board;
 	
-	public GameActionsTests() {
+	@BeforeClass
+	public static void setUp() {
 		board = new Board();
 		board.loadConfigFiles("resources/clueKey.txt", "resources/cluelayout.csv", "resources/CluePlayers.txt", "resources/ClueCards.txt");
+		board.calcAdjacencies();
 	}
 
 	@Test
 	public void testAccusation() {
-		board.setSolution("Mr. T", "Knife", "Entry");
-		Assert.assertTrue(board.checkAccusation("Mr. T", "Knife", "Entry"));
-		Assert.assertFalse(board.checkAccusation("Mrs. F", "Kinfe", "Entry"));
-		Assert.assertFalse(board.checkAccusation("Mr. T", "Gun", "Entry"));
-		Assert.assertFalse(board.checkAccusation("Mr. T", "Knife", "Kitchen"));
+		board.deal();
+		Assert.assertTrue(board.checkAccusation(board.getSolution().getPerson(), board.getSolution().getWeapon(), 
+				board.getSolution().getRoom()));
+		Assert.assertFalse(board.checkAccusation(board.getSolution().getPerson(), " ", " "));
+		Assert.assertFalse(board.checkAccusation(" ", board.getSolution().getWeapon(), board.getSolution().getRoom()));
+		Assert.assertFalse(board.checkAccusation(" ", " ", " "));
 	}
 	
 	@Test
@@ -69,7 +74,7 @@ public class GameActionsTests {
 		Card testWeapon = new Card("testWeapon", Card.CardType.WEAPON);
 		Card testPerson = new Card("testPerson", Card.CardType.PERSON);
 		first.addCard(testRoom);
-		if(first.disproveSuggestion(" ", " ", "testRoom") == testRoom) {
+		if(first.disproveSuggestion(null, null, testRoom) == testRoom) {
 			isDisproved = true;
 		}
 		Assert.assertTrue(isDisproved);
@@ -81,9 +86,9 @@ public class GameActionsTests {
 		int weaponCount = 0;
 		int roomCount = 0;
 		for(int count = 0; count < 10; ++count) {
-			if(first.disproveSuggestion(" ", "testWeapon", "testRoom") == testRoom)
+			if(first.disproveSuggestion(null, testWeapon, testRoom) == testRoom)
 				++roomCount;
-			if(first.disproveSuggestion(" ", "testWeapon", "testRoom") == testWeapon)
+			if(first.disproveSuggestion(null, testWeapon, testRoom) == testWeapon)
 				++weaponCount;
 		}
 		Assert.assertTrue(roomCount > 0 && weaponCount > 0);
@@ -97,9 +102,9 @@ public class GameActionsTests {
 		int firstCount = 0;
 		int secondCount = 0;
 		for(int count = 0; count < 10; ++count) {
-			if(board.handleSuggestion(" ", "testWeapon", "testRoom") == first)
+			if(board.handleSuggestion(null, testWeapon, testRoom, board.getHumanPlayer()) == first)
 				++firstCount;
-			if(board.handleSuggestion(" ", "testWeapon", "testRoom") == second)
+			if(board.handleSuggestion(null, testWeapon, testRoom, board.getHumanPlayer()) == second)
 				++secondCount;
 		}
 		Assert.assertTrue(firstCount > 0 && secondCount > 0);
@@ -109,12 +114,12 @@ public class GameActionsTests {
 		//Test that the human player correctly disproves a suggestion.
 		HumanPlayer you = board.getHumanPlayer();
 		you.addCard(testRoom);
-		Assert.assertEquals(testRoom, you.disproveSuggestion(" ", " ", "testRoom"));
+		Assert.assertEquals(testRoom, you.disproveSuggestion(null, null, testRoom));
 		you.removeCard(testRoom);
 		
 		//Test that the player who's turn it is does not return a card.
 		first.addCard(testRoom);
-		Assert.assertNotSame(first, board.handleSuggestion(" ", " ", "testRoom"));
+		Assert.assertNotSame(first, board.handleSuggestion(null, null, testRoom, first));
 	}
 	
 	@Test

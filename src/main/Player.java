@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class Player {
@@ -9,6 +10,7 @@ public class Player {
 	private WalkwayCell start;
 	private ArrayList<Card> cards;
 	private RoomCell lastVisited;
+	public static ArrayList<Card> allCards = new ArrayList<Card>();
 	
 	public Player(String theName, String theColor, WalkwayCell theStart) {
 		name = theName;
@@ -17,8 +19,19 @@ public class Player {
 		cards = new ArrayList<Card>();
 	}
 	
-	public Card disproveSuggestion(String person, String weapon, String room) {
-		return null;
+	public Card disproveSuggestion(Card person, Card weapon, Card room) {
+		ArrayList<Card> suggestionHand = new ArrayList<Card>();
+		if(cards.contains(person)) 
+			suggestionHand.add(person);
+		if(cards.contains(weapon))
+			suggestionHand.add(weapon);
+		if(cards.contains(room))
+			suggestionHand.add(room);
+		Random rand = new Random();
+		if(suggestionHand.isEmpty())
+			return null;
+		int size = suggestionHand.size();
+		return suggestionHand.get(rand.nextInt(size));
 	}
 	
 	public RoomCell getLastVisited() {

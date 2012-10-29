@@ -13,5 +13,13 @@ public abstract class BoardCell {
 	public int getIndex() {
 		return Board.calcIndex(row, column);
 	}
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof BoardCell) {
+			BoardCell cellO = (BoardCell) o;
+			return Board.calcIndex(row, column) == cellO.getIndex();
+		}
+		return false;
+	}
 	// TODO "later we will add an abstract method named draw
 }
